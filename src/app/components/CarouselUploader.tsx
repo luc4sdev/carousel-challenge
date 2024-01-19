@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
 import { useDropzone } from 'react-dropzone'
@@ -21,12 +21,23 @@ import { PrevArrow } from "./PrevArrow";
 
 
 export function CarouselUploader() {
-
-    const [selectedImages, setSelectedImages] = useState([]);
+    
+    const [selectedImages, setSelectedImages] = useState<string[]>(JSON.parse(String(localStorage.getItem("selectedImages"))) || []);
     const [error, setError] = useState(false);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(-1);
+console.log(selectedImages)
 
+
+    // Save images to localStorage whenever selectedImages changes
+    useEffect(() => {
+        try {
+            localStorage.setItem("selectedImages", JSON.stringify(selectedImages));
+            console.log("Saved to localStorage:", selectedImages);
+        } catch (error) {
+            console.error("Error saving to localStorage:", error);
+        }
+    }, [selectedImages]);
 
     const onDrop = useCallback((acceptedFiles: any, rejectedFiles: any) => {
         acceptedFiles.forEach((file: any) => {
@@ -39,7 +50,7 @@ export function CarouselUploader() {
 
                 img.onload = () => {
                     if (img.width && img.height && img.width <= 800 && img.height <= 800) {
-                        setSelectedImages((prevState) => [...prevState, file]);
+                        setSelectedImages((prevState) => [...prevState, img.src]);
                     } else {
                         console.log('A imagem deve ter no máximo 800x800 pixels.');
                         setError(true)
@@ -163,11 +174,10 @@ export function CarouselUploader() {
                         </div>
 
 
-
                         {selectedImages.length > 0 &&
                             selectedImages.map((image, index) => (
                                 <div key={index} className="relative">
-                                    <Image src={`${URL.createObjectURL(image)}`} onMouseOver={() => handleShowDeleteButton(index)} onMouseOut={() => setShowDeleteButton(false)} width={200} height={200} className="rounded-lg max-w-[200px] max-h-[200px] hover:brightness-50" alt={`Image ${index}`} />
+                                    <Image src={image} onMouseOver={() => handleShowDeleteButton(index)} onMouseOut={() => setShowDeleteButton(false)} width={200} height={200} className="rounded-lg max-w-[200px] max-h-[200px] hover:brightness-50" alt={`Image ${index}`} />
 
                                     {(showDeleteButton && currentIndex === index) && (
                                         <Image src={Delete} onClick={() => deleteImage(index)} onMouseOver={() => setShowDeleteButton(true)} onMouseOut={() => setShowDeleteButton(false)} className="absolute z-10 -top-2 right-36 cursor-pointer" alt="Delete" />
