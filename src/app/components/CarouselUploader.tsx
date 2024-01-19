@@ -10,8 +10,11 @@ import UpIcon from '@/../../public/icons/Up_ico.svg'
 import ArrowLeft from '@/../../public/icons/arrow_left.svg'
 import ArrowRight from '@/../../public/icons/arrow_right.svg'
 import Plus from '@/../../public/icons/plus.svg'
+import Delete from '@/../../public/icons/delete.svg'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { NextArrow } from "./NextArrow";
+import { PrevArrow } from "./PrevArrow";
 
 
 
@@ -21,6 +24,9 @@ export function CarouselUploader() {
 
     const [selectedImages, setSelectedImages] = useState([]);
     const [error, setError] = useState(false);
+    const [showDeleteButton, setShowDeleteButton] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(-1);
+
 
     const onDrop = useCallback((acceptedFiles: any, rejectedFiles: any) => {
         acceptedFiles.forEach((file: any) => {
@@ -71,6 +77,8 @@ export function CarouselUploader() {
         slidesToShow: 4,
         slidesToScroll: 4,
         initialSlide: 0,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
         responsive: [
             {
                 breakpoint: 1024,
@@ -98,6 +106,16 @@ export function CarouselUploader() {
             }
         ]
     };
+
+    function handleShowDeleteButton(index:number) {
+        setCurrentIndex(index)
+        setShowDeleteButton(true)
+    } 
+
+    function deleteImage(index: number) {
+       const aux = selectedImages.filter((image,i) => i !== index)
+       setSelectedImages(aux)
+    }
 
     return (
         <div className='w-3/4 flex justify-center items-center gap-3'>
@@ -135,7 +153,7 @@ export function CarouselUploader() {
                 </>
             ) :
                 <div className="w-full h-56 rounded-xl border-gray-400 bg-white" >
-                    <Slider className="w-full h-full flex p-3" {...settings} >
+                    <Slider className="w-full h-full p-3" {...settings} >
 
                         <div {...getRootProps()}>
                             <div className="w-[200px] h-[200px] flex flex-col justify-center items-center rounded-lg bg-neutral-300 cursor-pointer hover:brightness-105">
@@ -148,8 +166,13 @@ export function CarouselUploader() {
 
                         {selectedImages.length > 0 &&
                             selectedImages.map((image, index) => (
-                                <div key={index}>
-                                    <Image src={`${URL.createObjectURL(image)}`} width={200} height={200} className="rounded-lg max-w-[200px] max-h-[200px] hover:brightness-50 cursor-pointer" alt={`Image ${index}`} />
+                                <div key={index} className="relative">
+                                    <Image src={`${URL.createObjectURL(image)}`} onMouseOver={() => handleShowDeleteButton(index)} onMouseOut={() => setShowDeleteButton(false)} width={200} height={200} className="rounded-lg max-w-[200px] max-h-[200px] hover:brightness-50" alt={`Image ${index}`} />
+
+                                    {(showDeleteButton && currentIndex === index) && (
+                                        <Image src={Delete} onClick={() => deleteImage(index)} onMouseOver={() => setShowDeleteButton(true)} onMouseOut={() => setShowDeleteButton(false)} className="absolute z-10 -top-2 right-36 cursor-pointer" alt="Delete" />
+                                    )}
+
                                 </div>
                             ))}
 
