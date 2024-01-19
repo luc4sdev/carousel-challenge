@@ -12,12 +12,14 @@ import "slick-carousel/slick/slick-theme.css";
 
 export function CarouselUploader() {
 
-    const [selectedImages, setSelectedImages] = useState<string[]>(JSON.parse(String(localStorage.getItem("selectedImages"))) || []);
+    const [selectedImages, setSelectedImages] = useState<string[]>([])
     const [error, setError] = useState(false);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(-1);
-    console.log(selectedImages)
 
+    useEffect(() => {
+        setSelectedImages(JSON.parse(String(localStorage.getItem("selectedImages"))))
+    }, [])
 
     useEffect(() => {
         try {
@@ -54,7 +56,6 @@ export function CarouselUploader() {
     }, []);
 
     const {
-        isDragActive,
     } = useDropzone({
         onDrop, accept: {
             'image/jpeg': [],
@@ -85,13 +86,13 @@ export function CarouselUploader() {
                         {error ? (
                             <UploadError setError={setError} />
                         )
-                                :
-                                (
-                                    <UploadInitial onDrop={onDrop} />
-                                )
+                            :
+                            (
+                                <UploadInitial onDrop={onDrop} />
+                            )
 
                         }
-                        
+
                     </>
                 )
                 :
@@ -100,9 +101,9 @@ export function CarouselUploader() {
                         <UploadError setError={setError} />
                     )
                         :
-                            (
-                                <UploadSlider onDrop={onDrop} selectedImages={selectedImages} showDeleteButton={showDeleteButton} setShowDeleteButton={setShowDeleteButton} currentIndex={currentIndex} handleShowDeleteButton={handleShowDeleteButton} deleteImage={deleteImage} />
-                            )
+                        (
+                            <UploadSlider onDrop={onDrop} selectedImages={selectedImages} showDeleteButton={showDeleteButton} setShowDeleteButton={setShowDeleteButton} currentIndex={currentIndex} handleShowDeleteButton={handleShowDeleteButton} deleteImage={deleteImage} />
+                        )
 
                     }
                 </>
