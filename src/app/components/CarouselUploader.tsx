@@ -90,12 +90,14 @@ console.log(selectedImages)
         initialSlide: 0,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
+        variableWidth: true,
+        width: '250px',
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
                     infinite: true,
                     dots: true
                 }
@@ -164,9 +166,9 @@ console.log(selectedImages)
                 </>
             ) :
                 <div className="w-full h-56 rounded-xl border-gray-400 bg-white" >
-                    <Slider className="w-full h-full p-3" {...settings} >
+                    <Slider className="w-full h-full p-3 min-w-[200px]" {...settings} >
 
-                        <div {...getRootProps()}>
+                        <div {...getRootProps()} className="min-w-[200px]">
                             <div className="w-[200px] h-[200px] flex flex-col justify-center items-center rounded-lg bg-neutral-300 cursor-pointer hover:brightness-105">
                                 <Image src={Plus} alt="Plus" />
                                 <p className="text-xl text-center">Add new images</p>
@@ -180,7 +182,7 @@ console.log(selectedImages)
                                     <Image src={image} onMouseOver={() => handleShowDeleteButton(index)} onMouseOut={() => setShowDeleteButton(false)} width={200} height={200} className="rounded-lg max-w-[200px] max-h-[200px] hover:brightness-50" alt={`Image ${index}`} />
 
                                     {(showDeleteButton && currentIndex === index) && (
-                                        <Image src={Delete} onClick={() => deleteImage(index)} onMouseOver={() => setShowDeleteButton(true)} onMouseOut={() => setShowDeleteButton(false)} className="absolute z-10 -top-2 right-36 cursor-pointer" alt="Delete" />
+                                        <Image src={Delete} onClick={() => deleteImage(index)} onMouseOver={() => setShowDeleteButton(true)} onMouseOut={() => setShowDeleteButton(false)} className="absolute z-10 top-0 right-10 cursor-pointer" alt="Delete" />
                                     )}
 
                                 </div>
