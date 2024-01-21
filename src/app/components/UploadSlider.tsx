@@ -78,11 +78,11 @@ export function UploadSlider({ onDrop, selectedImages, showDeleteButton, setShow
         <div className='w-3/4 flex justify-center items-center gap-3' >
 
 
-            <div className="w-full h-56 rounded-xl border border-gray-400 bg-white relative" {...getRootProps()}>
+            <div className="w-full h-56 rounded-xl border border-gray-400 bg-white relative"  >
                 {isDragActive && (<UploadDrag />)}
-                <Slider className="w-full h-full p-3 min-w-[200px]" {...settings}>
+                <Slider className="w-full h-full p-3 min-w-[200px]" {...settings} >
 
-                    <div className="min-w-[200px]" >
+                    <div className="min-w-[200px]" {...getRootProps()}>
                         <div className="w-[200px] h-[200px] flex flex-col justify-center items-center rounded-lg bg-neutral-300 cursor-pointer hover:brightness-105">
                             <Image src={plus} alt="Plus" />
                             <p className="text-xl text-center">Add new images</p>
@@ -105,9 +105,6 @@ export function UploadSlider({ onDrop, selectedImages, showDeleteButton, setShow
 
 
             </div>
-
-
-          
         </div>
     )
 }

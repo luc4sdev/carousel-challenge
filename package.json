@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "storybook": "start-storybook -p 6006 -s public",
+    "serve-storybook": "serve storybook-static"
   },
   "dependencies": {
     "next": "14.0.4",
